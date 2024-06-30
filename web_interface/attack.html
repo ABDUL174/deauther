@@ -1,0 +1,169 @@
+<!--- This software is licensed under the MIT License: https://github.com/ABDUL174 -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui" />
+  <meta name="theme-color" content="#36393E" />
+
+  <meta name="description" content="ESP8266 Deauther" />
+  <title>PAL3RMO DEAUTHER</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="js/site.js"></script>
+  <script src="js/attack.js"></script>
+</head>
+
+<body onload="loadLang()">
+  <div class="sidenav ">
+    <a href="scan.html" class="tooltip-container">
+      <i class="fas fa-search"></i>
+      <div class="tooltip-text">Scan</div>
+    </a>
+    <a href="ssids.html" class="tooltip-container">
+      <i class="fas fa-list"></i>
+      <div class="tooltip-text">SSIDs</div>
+    </a>
+    <a href="attack.html" class="tooltip-container">
+      <i class="fas fa-bullseye"></i>
+      <div class="tooltip-text">Attack</div>
+    </a>
+    <a href="settings.html" class="tooltip-container">
+      <i class="fas fa-cog"></i>
+      <div class="tooltip-text">Settings</div>
+    </a>
+    <a href="info.html" class="tooltip-container">
+      <i class="fas fa-info-circle"></i>
+      <div class="tooltip-text">Info</div>
+    </a>
+  </div>
+
+  <div style="margin-left: 60px; padding: 15px">
+    <!-- Main content goes here -->
+  </div>
+
+  <div class="container mt-6 ">
+    <div class="row ">
+      <div class="col-12">
+
+        <h1 class="header text-center mb-4" data-translate="attacks">Attacks</h1>
+
+        <p>
+          <span class="info-span" data-translate="info_span">INFO:</span><br />
+          <span data-translate="attack_info">
+            - You might lose connection when starting an attack!<br />
+            - You need to select a target for the deauth attack.<br />
+            - You need a saved SSID for the beacon and probe attack.<br />
+            - Click reload to refresh the packet rate.<br />
+          </span>
+          <span class="info-disclaimer" data-translate="info_disclaimer">
+            In case of an unexpected error, please reload the site and look at the serial monitor for further debugging.
+          </span><br />
+        </p>
+
+        <div class="text-right mb-3">
+          <button class="btn btn-danger btn-custom" onclick="stopAll()" data-translate="stop">Stop</button>
+          <button class="btn btn-primary btn-custom" onclick="load()" data-translate="reload">Reload</button>
+        </div>
+
+        <table class="table table-bordered table-custom">
+          <thead>
+            <tr>
+              <th class="tablehead" data-translate="attacks">Attacks</th>
+              <th class="tablehead" data-translate="targets">Targets</th>
+              <th class="tablehead">Pkts/s</th>
+              <th class="tablehead" data-translate="start_stop">START / STOP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tablehead">
+              <td>Deauth</td>
+              <td id="deauthTargets">0</td>
+              <td id="deauthPkts">0/0</td>
+              <td>
+                <button id="deauth" class="btn btn-success" onclick="start(0)" data-translate="start">START</button>
+              </td>
+            </tr>
+            <tr class="tablehead">
+              <td>Beacon</td>
+              <td id="beaconTargets">0</td>
+              <td id="beaconPkts">0/0</td>
+              <td>
+                <button id="beacon" class="btn btn-success" onclick="start(1)" data-translate="start">START</button>
+              </td>
+            </tr>
+            <tr class="tablehead">
+              <td>Probe</td>
+              <td id="probeTargets">0</td>
+              <td id="probePkts">0/0</td>
+              <td>
+                <button id="probe" class="btn btn-success" onclick="start(2)" data-translate="start">START</button>
+              </td>
+            </tr>
+            <tr class="tablehead">
+              <td colspan="2">All Pkts/s:</td>
+              <td colspan="2" id="allpkts">0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 class="section-title">Deauth</h2>
+        <p data-translate="deauth_desc">
+          Closes the connection of WiFi devices by sending deauthentication frames to access points and client devices
+          you selected.<br />
+          This is only possible because a lot of devices don't use the 802.11w-2009 standard that offers a protection
+          against this attack.<br />
+          Please only select one target! When you select multiple targets that run on different channels and start the
+          attack, it will quickly switch between those channels and you have no chance to reconnect to the access point
+          that hosts this web interface.
+        </p>
+
+        <h2 class="section-title">Beacon</h2>
+        <p data-translate="beacon_desc">
+          Beacon packets are used to advertise access points. By continuously sending beacon packets out, it will look
+          like you created new WiFi networks.<br />
+          You can specify the network names under SSIDs.<br />
+        </p>
+
+        <h2 class="section-title">Probe</h2>
+        <p data-translate="probe_desc">
+          Probe requests are sent by client devices to ask if a known network is nearby.<br />
+          Use this attack to confuse WiFi trackers by asking for networks that you specified in the SSID list.<br />
+          It's unlikely you will see any impact by this attack with your home network.<br />
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span id="version">Version 3.0.0</span>
+    <br /><br />
+    <a href="http://deauther.maltronics.com" target="_blank">Wiki</a> |
+    <a href="info.html">Credits</a>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Initialize tooltips
+    document.querySelectorAll('[data-toggle="tooltip"]').forEach((item) => {
+      item.addEventListener("mouseover", () => {
+        const tooltip = item.querySelector(".tooltip-text");
+        tooltip.style.visibility = "visible";
+        tooltip.style.opacity = "1";
+      });
+      item.addEventListener("mouseout", () => {
+        const tooltip = item.querySelector(".tooltip-text");
+        tooltip.style.visibility = "hidden";
+        tooltip.style.opacity = "0";
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!--- This software is licensed under the MIT License: https://github.com/ABDUL174 -->
+
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+	<meta name="theme-color" content="#36393E">
+
+	<meta name="description" content="ESP8266 Deauther">
+	<title>PAL3RMO DEAUTHER</title>
+	<link rel="icon" href="favicon.png" type="image/png">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+	<script src="js/site.js"></script>
+	<script src="js/ssids.js"></script>
+</head>
+
+<body onload="loadLang()">
+	<div class="sidenav ">
+		<a href="scan.html" class="tooltip-container">
+			<i class="fas fa-search"></i>
+			<div class="tooltip-text">Scan</div>
+		</a>
+		<a href="ssids.html" class="tooltip-container">
+			<i class="fas fa-list"></i>
+			<div class="tooltip-text">SSIDs</div>
+		</a>
+		<a href="attack.html" class="tooltip-container">
+			<i class="fas fa-bullseye"></i>
+			<div class="tooltip-text">Attack</div>
+		</a>
+		<a href="settings.html" class="tooltip-container">
+			<i class="fas fa-cog"></i>
+			<div class="tooltip-text">Settings</div>
+		</a>
+		<a href="info.html" class="tooltip-container">
+			<i class="fas fa-info-circle"></i>
+			<div class="tooltip-text">Info</div>
+		</a>
+	</div>
+
+	<div id="status"></div>
+
+	<div class="container  mt-5">
+		<div class="row">
+			<div class="col-12">
+				<h1 class="header" data-translate="ssids">SSIDs</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label for="ssid">SSID</label>
+			</div>
+			<div class="">
+				<input type="text" id="ssid" name="ssid" placeholder="SSID" maxlength="32">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label for="enc">WPA2</label>
+			</div>
+			<div>
+				<label class="checkBoxContainer">
+					<input id="enc" type="checkbox">
+					<span class="checkmark"></span>
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label data-translate="number">Number</label>
+			</div>
+			<div class="">
+				<input id="ssidNum" type="number" value="1" max="60" min="1">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label data-translate="overwrite">Overwrite</label>
+			</div>
+			<div class="">
+				<label class='checkBoxContainer'><input id="overwrite" type='checkbox' checked><span
+						class='checkmark'></span></label>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-12">
+				<button onclick="add()" class="btn btn-success" data-translate="add">Add</button>
+				<button onclick="addSelected()" class="btn btn-info ml-2" data-translate="add_selected">Clone Selected
+					APs</button>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-12">
+				<button onclick="load()" class="btn btn-primary float-right" data-translate="reload">Reload</button>
+				<p>
+					<span class="text-danger" data-translate="info_span">INFO:</span><br>
+					<span data-translate="ssids_info">
+						- This SSID list is used for the beacon and probe attack.<br>
+						- Each SSID can be up to 32 characters.<br>
+						- Don't forget to click save when you edited a SSID.<br>
+						- You have to click Reload after cloning SSIDs.<br>
+					</span>
+					<span data-translate="info_disclaimer">In case of an unexpected error, please reload the site and
+						look at the serial monitor for further debugging.</span><br>
+				</p>
+				<hr>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-6">
+				<label for="interval" class="font-weight-bold" data-translate="time_interval">Time Interval</label>
+			</div>
+			<div style="display: flex;">
+
+				<input id="interval" name="interval" type="number" class="form-control" value="10" max="600" min="1">
+				<span class="snapclass">s</span>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-12">
+				<button onclick="enableRandom()" id="randomBtn" class="btn btn-warning">Enable Random Mode</button>
+				<p class="mt-2" data-translate="random_desc">Enable the random mode to generate a random SSID list in a
+					given
+					interval.</p>
+				<hr>
+				<table class="tablehead" id="ssidTable" class="table"></table>
+				<button onclick="removeAll()" class="btn btn-danger" data-translate="remove_all">Remove All</button>
+			</div>
+		</div>
+		<footer>
+			<span id="version">Version 3.0.0</span>
+			<br>
+			<br>
+			<a href="http://deauther.maltronics.com" target="_blank">Wiki</a> | <a href="info.html">Credits</a>
+		</footer>
+</body>
+
+</html>
