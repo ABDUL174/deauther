@@ -1,0 +1,160 @@
+<!--- This software is licensed under the MIT License: https://github.com/ABDUL174 -->
+
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+	<meta name="theme-color" content="#36393E">
+
+	<meta name="description" content="ESP8266 Deauther">
+	<title>PAL3RMO DEAUTHER</title>
+	<link rel="icon" href="favicon.png" type="image/png">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+	<script src="js/site.js"></script>
+	<script src="js/scan.js"></script>
+</head>
+
+<body onload="loadLang()">
+	<div class="sidenav ">
+		<a href="scan.html" class="tooltip-container">
+			<i class="fas fa-search"></i>
+			<div class="tooltip-text">Scan</div>
+		</a>
+		<a href="ssids.html" class="tooltip-container">
+			<i class="fas fa-list"></i>
+			<div class="tooltip-text">SSIDs</div>
+		</a>
+		<a href="attack.html" class="tooltip-container">
+			<i class="fas fa-bullseye"></i>
+			<div class="tooltip-text">Attack</div>
+		</a>
+		<a href="settings.html" class="tooltip-container">
+			<i class="fas fa-cog"></i>
+			<div class="tooltip-text">Settings</div>
+		</a>
+		<a href="info.html" class="tooltip-container">
+			<i class="fas fa-info-circle"></i>
+			<div class="tooltip-text">Info</div>
+		</a>
+	</div>
+
+	<div id="status"></div>
+
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1 class="display-4 mb-4" data-translate="scan">Scan</h1>
+				<div class="btn-group mb-4">
+					<button id="scanZero" onclick="scan(0)" class="btn btn-primary">Scan APs</button>
+					<button id="scanOne" onclick="scan(1)" class="btn btn-primary">Scan Stations</button>
+					<button id="RButton" onclick="load()" data-translate="reload"
+						class="btn btn-secondary ml-2">Reload</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mt-4">
+			<div class="col-md-1">
+				<label for="ch" class="form-label" data-translate="channel">Channel</label>
+				<select id="ch" name="ch" class="form-select">
+					<option value="all" data-translate="all">All</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<label class="form-label" data-translate="station_scan_time">Station Scan Time</label>
+				<div class="input-group">
+					<input type="number" value="15" id="scanTime" class="form-control">
+					<span class="input-group-text">s</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mt-4">
+			<div class="col-12">
+				<p class="text-danger" data-translate="info_span">INFO:</p>
+				<p data-translate="scan_info">
+					- Click Scan and wait until the blue LED on your board turns off (or changes to green), then click
+					on Reload.<br>
+					- The web interface will be unavailable during a station scan and you will have to reconnect!<br>
+					- Please select only one target!
+				</p>
+				<p data-translate="info_disclaimer">In case of an unexpected error, please reload the site and look at
+					the serial monitor for further debugging.</p>
+			</div>
+		</div>
+
+		<div class="row mt-5">
+			<div class="col-12">
+				<h2 class="mb-3"><span>Access Points</span>: <span id="apNum"></span></h2>
+				<table class="tablehead" id="apTable" class="table table-bordered"></table>
+				<div class="mt-3">
+					<button onclick="selectAll(0,true)" class="btn btn-primary me-2" data-translate="select_all">Select
+						All</button>
+					<button onclick="selectAll(0,false)" class="btn btn-secondary"
+						data-translate="deselect_all">Deselect All</button>
+				</div>
+			</div>
+		</div>
+
+		<hr class="my-5">
+
+		<div class="row mt-5">
+			<div class="col-12">
+				<h2 class="mb-3"><span>Stations</span>: <span id="stNum"></span></h2>
+				<table class="tablehead" id="stTable" class="table table-bordered"></table>
+				<div class="mt-3">
+					<button onclick="selectAll(1,true)" class="btn btn-primary me-2" data-translate="select_all">Select
+						All</button>
+					<button onclick="selectAll(1,false)" class="btn btn-secondary"
+						data-translate="deselect_all">Deselect All</button>
+				</div>
+			</div>
+		</div>
+
+		<hr class="my-5">
+
+		<div class="row mt-5">
+			<div class="col-12">
+				<h2 class="mb-3"><span data-translate="devices">Saved Devices</span>: <span id="nNum"></span></h2>
+				<table class="tablehead" id="nTable" class="table table-bordered"></table>
+				<div class="mt-3">
+					<button onclick="selectAll(2,true)" class="btn btn-primary me-2" data-translate="select_all">Select
+						All</button>
+					<button onclick="selectAll(2,false)" class="btn btn-secondary"
+						data-translate="deselect_all">Deselect All</button>
+					<button onclick="add(2)" class="btn btn-success" data-translate="new">New</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer>
+		<span id="version">Version 3.0.0</span>
+		<br>
+		<br>
+		<a href="http://deauther.maltronics.com" target="_blank">Wiki</a> | <a href="info.html">Credits</a>
+	</footer>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

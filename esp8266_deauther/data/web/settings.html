@@ -1,0 +1,88 @@
+<!--- This software is licensed under the MIT License: https://github.com/ABDUL174 -->
+
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+	<meta name="theme-color" content="#36393E">
+
+	<meta name="description" content="ESP8266 Deauther">
+	<title>PAL3RMO DEAUTHER</title>
+	<link rel="icon" href="favicon.png" type="image/png">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+	<script src="js/site.js"></script>
+	<script src="js/settings.js"></script>
+</head>
+
+<body onload="loadLang()">
+	<div class="sidenav ">
+		<a href="scan.html" class="tooltip-container">
+			<i class="fas fa-search"></i>
+			<div class="tooltip-text">Scan</div>
+		</a>
+		<a href="ssids.html" class="tooltip-container">
+			<i class="fas fa-list"></i>
+			<div class="tooltip-text">SSIDs</div>
+		</a>
+		<a href="attack.html" class="tooltip-container">
+			<i class="fas fa-bullseye"></i>
+			<div class="tooltip-text">Attack</div>
+		</a>
+		<a href="settings.html" class="tooltip-container">
+			<i class="fas fa-cog"></i>
+			<div class="tooltip-text">Settings</div>
+		</a>
+		<a href="info.html" class="tooltip-container">
+			<i class="fas fa-info-circle"></i>
+			<div class="tooltip-text">Info</div>
+		</a>
+	</div>
+
+
+	<div id="status"></div>
+
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-12">
+				<h1 class="header mb-4" data-translate="settings">Settings</h1>
+
+				<div class="btn-group mr-2" role="group" aria-label="WiFi Controls">
+					<button
+						onclick="getFile('run?cmd=stopap'); alert('Turning off access point now. Restart your Deauther to be able to connect again.')"
+						class="btn btn-danger" data-translate="wifi_off">WiFi off</button>
+					<button onclick="getFile('run?cmd=reset;;save settings')" class="btn btn-danger ml-2"
+						data-translate="reset">Reset</button>
+					<button onclick="getFile('run?cmd=reboot')" class="btn btn-danger ml-2"
+						data-translate="reboot">Reboot</button>
+				</div>
+
+				<p class="mt-4">
+					<span class="text-danger" data-translate="info_span">INFO:</span><br>
+					<span data-translate="settings_info">
+						- Some settings require a reboot.<br>
+						- Click save to make sure that your changes are applied.<br>
+					</span>
+					<span data-translate="info_disclaimer">In case of an unexpected error, please reload the site and
+						look at the serial monitor for further debugging.</span>
+				</p>
+
+				<button onclick="save()" class="btn btn-success" data-translate="save">Save</button>
+				<button onclick="load()" class="btn btn-primary float-right" data-translate="reload">Reload</button>
+			</div>
+		</div>
+		<div class="tablehead" id="settingsList"></div>
+	</div>
+	<footer>
+		<span id="version">Version 3.0.0</span>
+		<br>
+		<br>
+		<a href="http://deauther.maltronics.com" target="_blank">Wiki</a> | <a href="info.html">Credits</a>
+	</footer>
+</body>
+
+</html>
